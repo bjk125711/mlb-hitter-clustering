@@ -48,4 +48,15 @@ ds_5_cluster %>%
   select(`km_out$cluster`, last_name, first_name, b_k_percent:b_total_bases) %>% 
   arrange(`km_out$cluster`, desc(on_base_plus_slg))
 
-
+# Should just use variables that hitter's swing can influence
+set.seed(2)
+y <- ds %>% 
+  select(exit_velocity_avg, swing_percent, whiff_percent, pull_percent:opposite_percent, flyballs_percent, linedrives_percent, groundballs_percent,
+         popups_percent, solidcontact_percent:hard_hit_percent, launch_angle_avg:barrel_batted_rate) %>% 
+  scale(center = TRUE, scale = TRUE)
+km_out_y <- kmeans(y, 6, nstart = 20)
+km_out_y
+ds_5_cluster <- cbind(ds, km_out_y$cluster)
+ds_5_cluster %>% 
+  select(`km_out_y$cluster`, last_name, first_name, b_k_percent:b_total_bases) %>% 
+  arrange(`km_out_y$cluster`, desc(on_base_plus_slg))
