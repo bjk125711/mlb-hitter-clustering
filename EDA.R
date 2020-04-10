@@ -34,6 +34,15 @@ ds %>%
   cor(use = "complete.obs", method = "pearson") %>%
   corrplot.mixed(lower = "number", upper = "circle", tl.pos = "lt")
 
+ds %>% 
+  mutate(age_bucket = case_when(
+    player_age <= 26 ~ 'Pre-ARB',
+    player_age %in% c(27:31) ~ 'ARB',
+    player_age >= 32 ~ 'FA',
+    TRUE ~ 'MISTAKE'
+  )) %>% 
+  ggplot(aes(player_age, exit_velocity_avg)) +
+  geom_boxplot(aes(group = age_bucket))
 
 # K-means clustering ------------------------------------------------------
 
